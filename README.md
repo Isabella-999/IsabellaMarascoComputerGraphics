@@ -1,6 +1,4 @@
-# ComputerGraphics
-
-Il seguente progetto è stato sviluppato per la laurea Magistrale in Informatica dell'università di Bologna per l'esame di Computer Graphics.
+# Computer Graphics
 
 ## Obiettivo
 
