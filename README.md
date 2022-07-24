@@ -1,92 +1,47 @@
 # ComputerGraphics
 
+Il seguente progetto è stato sviluppato per la laurea Magistrale in Informatica dell'università di Bologna per l'esame di Computer Graphics.
+
+## Obiettivo
+
+Sviluppare una "3D-WebApp" usando WebGL (HTML5, CSS e contesto webgl), linguaggio JavaScript e OpenGL ES SL con browser Chrome.
+
+## Testo
+
+Si progetti ed implementi un'applicazione 3D interattiva composta da almeno un oggetto principale di tipo mesh poligonale caricato da file (formato OBJ Wavefront). Si definisca un'opportuna scenografia colorando/illuminando e texturando gli oggetti della scena. Sono banditi i videogioco/applicazioni denominati ''sparatutto'' e ''labirinti''.
+
+## Richieste grafiche obbligatorie
+
+- [ ] geometria 3D visualizzata in proiezione prospettica;
+- [ ] input utente (si gestisca l'interazione 3D usando sia la tastiera che il mouse e opzionalmente un gamepad);
+- [ ] illuminazione e sfumatura (gli oggetti 3D devono essere illuminati da almeno una luce);
+- [ ] texture mapping (almeno due oggetti 3D devono avere una texture applicata e almeno una deve essere una foto dell'autore)
+- [ ] pannello di controllo su schermo (si preveda un pannello di controllo in cui usando testo e grafica 2D si visualizzino le funzioni utente, ecc.);
+- [ ] si ponga attenzione che il tutto sia fruibile anche da un dispositivo mobile (gestione eventi touch);
+- [ ] advanced rendering (opzionale)(da menu' si preveda l'attivazione/disattivazione di almeno una tecnica di resa avanzata come per esempio: ombre, trasparenze, riflessioni, bump-mapping, ecc.)
+
+## Elementi di Giudizio
+
+Elementi qualificanti il progetto saranno l'originalita' delle scelte (tipo di applicazione, oggetti, scenografia, texture, ecc.) e le funzionalita' dal punto di vista grafico del codice realizzato. Si rammenti che il progetto e' sulla grafica 3D.
+
+## Consegna
+
+Si richiede di consegnare un archivio cognome.zip (file zippato) contenente due cartelle:
+la prima si chiami "project" e contenga il codice;
+la seconda si chiami "doc" e contenga una relazione in html sul progetto realizzato (descrizione dell'applicazione e suo utilizzo, spiegazione delle scelte effettuate, funzionalita' WebGL utilizzate, particolarita'). 
+L'archivio contenente il progetto deve essere scaricabile da un repository (indicare per email al docente da dove è scaricabile) almeno 7-10 giorni prima dell'appello d'esame (non inviare il progetto come allegato ad un email). 
+Per il progetto si stimano necessarie almeno 40 ore di lavoro.
 
 
-## Getting started
+# Avvertenza 1
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Non e' vietato "guardare" codice esistente, anzi si caldeggia di farlo, ma per imparare cose nuove e non per plagiare! Se trovate qualcosa di carino che funziona, ma non capite perche', non lo usate; vi potrebbe essere chiesto di spiegarlo.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## Avvertenza 2
 
-## Add your files
+Non si possono usare librerie diverse da quelle messe a disposizione durante il corso mentre si raccomanda di utilizzare tutto quello che e' stato messo a disposizione (glm_utils.js per il caricamento di file .obj, mesh_utils.js, webgl-utils.js, m4.js, jquery-3.6.0.js, dat.gui.js e ui_components.js).
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+## Avvertenza 3
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/Isabella-999/computergraphics.git
-git branch -M main
-git push -uf origin main
-```
+Eventuali domande sul progetto o richieste di spiegazione verrano pubblicate sulla pagina delle FAQ del progetto, per cui consultarla prima di chiedere spiegazioni al docente.
 
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.com/Isabella-999/computergraphics/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
