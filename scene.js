@@ -12,18 +12,19 @@ var emissive;  //Ke
 var shininess; //Ns
 var opacity;   //Ni
 
-function main() {
+async function main() {
   // Get A WebGL context
   /** @type {HTMLCanvasElement} */
   var canvas = document.getElementById("canvas");
   var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
-
   }
 
+  
   mesh.sourceMesh='obj/beach/beach.obj';
-  //mesh.sourceMesh='data/chair/chair.obj';
+  //mesh.sourceMesh='obj/cappello.obj';
+  //mesh.sourceMesh='obj/telo_mare.obj';
   //mesh.sourceMesh='data/boeing/boeing_3.obj';
   //mesh.sourceMesh='data/mannequin.obj';
   //mesh.sourceMesh='data/soccerball/soccerball.obj';
@@ -45,7 +46,6 @@ function main() {
   // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
   // Put the positions in the buffer
-  //setGeometry(gl);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
   // Create a buffer for normals
@@ -61,7 +61,7 @@ function main() {
   // Set Texcoords
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texcoords), gl.STATIC_DRAW);
 
-
+  
   var ambientLight=[0.2,0.2,0.2];
   var colorLight=[1.0,1.0,1.0];
 
@@ -75,6 +75,9 @@ function main() {
 
   gl.uniform1f(gl.getUniformLocation(program, "shininess"), shininess);
   gl.uniform1f(gl.getUniformLocation(program, "opacity"), opacity);
+
+  
+
 
   // Turn on the position attribute
   gl.enableVertexAttribArray(positionLocation);
@@ -101,7 +104,7 @@ function main() {
   // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
   size = 2;          // 2 components per iteration
   gl.vertexAttribPointer(texcoordLocation, size, type, normalize, stride, offset);
-
+//qua
   var fieldOfViewRadians = degToRad(30);
   var modelXRotationRadians = degToRad(0);
   var modelYRotationRadians = degToRad(0);
@@ -112,8 +115,8 @@ function main() {
   var zmin=0.1;
   var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, zmin, 200);
 
-  var cameraPosition = [4.5, 4.5, 2];
-  var up = [0, 0, 1];
+  var cameraPosition = [-4, 2, 4];
+  var up = [0, 1, 0];
   var target = [0, 0, 0];
 
   // Compute the camera's matrix using look at.
@@ -156,7 +159,10 @@ function main() {
   // Get the starting time.
   var then = 0;
 
-  requestAnimationFrame(drawScene);
+  requestAnimationFrame(drawScene); 
+
+
+  
 
   // Draw the scene.
   function drawScene(time) {
@@ -174,7 +180,7 @@ function main() {
     gl.enable(gl.DEPTH_TEST);
 
     // Animate the rotation
-    modelYRotationRadians += -0.7 * deltaTime;
+    modelYRotationRadians += -0.8 * deltaTime;
     modelXRotationRadians += -0.4 * deltaTime;
 
     // Clear the canvas AND the depth buffer.
@@ -186,14 +192,14 @@ function main() {
     matrix = m4.yRotate(matrix, modelYRotationRadians);
 
     // Set the matrix.
-    matrix = m4.identity()
+    matrix = m4.identity() //matrice identità
     gl.uniformMatrix4fv(matrixLocation, false, matrix);
 
     // Draw the geometry.
     gl.drawArrays(gl.TRIANGLES, 0, numVertices);
 
     requestAnimationFrame(drawScene);
-  }
+  } 
 }
 
 main();

@@ -1,4 +1,5 @@
 //Funzione che carica una texture presa dal prof. Casciola uniBo
+
 function loadTexture(gl, path, fileName) {
     const texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -36,8 +37,8 @@ function loadTexture(gl, path, fileName) {
     function isPowerOf2(value) {
        return (value & (value - 1)) == 0;
     }
- }
- 
+ } 
+
 //Funzione che utilizza la libreria glm_utils per leggere un eventuale 
 //file MTL associato alla mesh
   function readMTLFile(MTLfileName, mesh){
