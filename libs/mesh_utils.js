@@ -48,7 +48,7 @@ function nvr() {
 	this.materials = new Array();
 };
 
-function Grid_data() {  // mesh (grid) data
+function Grid_data() {  // mesh (grid) models
    this.npolygons;      // numero di poligoni
    this.firstv;         // per ogni poligono indice del primo vertice nel vettore dei nodi
                         // il numero di vertici per poligono e' determinato da firstv[i+1] - firstv[i];

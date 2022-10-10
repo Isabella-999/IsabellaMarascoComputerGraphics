@@ -1,130 +1,334 @@
 <!DOCTYPE html>
+
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Isabella Marasco - Computer Graphics Project</title>
-    <style>
-       body {
-            background: #30d1e2;
-        }
-      canvas {
-            margin: 10px;
-            padding: 30px;
-            background: #ffffff;
-            border: thin inset #aaaaaa;
-        }
-        .container {  /*to manage text on canvas and webgl */
-            height: 100%;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
-</head>
-<body>
-  <canvas id="canvas" width="800" height="600"></canvas>
-</body>
 
-<!-- vertex shader -->
+	<head>
+		<title>WebGL UniBO - Isabella Marasco</title>
 
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
-    attribute vec4 a_position;
-    attribute vec3 a_normal;
-    attribute vec2 a_texcoord;
-  
-    uniform mat4 u_projection;
-    uniform mat4 u_view;
-    uniform mat4 u_world;
-    uniform vec3 u_viewWorldPosition;
-  
-    varying vec3 v_normal;
-    varying vec3 v_surfaceToView;
-    varying vec2 v_texcoord;
-  
-    void main() {
-      vec4 worldPosition = u_world * a_position;
-      gl_Position = u_projection * u_view * worldPosition;
-      v_surfaceToView = u_viewWorldPosition - worldPosition.xyz;
-      v_normal = mat3(u_world) * a_normal;
-      v_texcoord = a_texcoord;
-    }
-  </script>
-  <!-- fragment shader -->
-  <script id="3d-vertex-shader" type="x-shader/x-vertex">
-    attribute vec4 a_position;
-    attribute vec3 a_normal;
-    attribute vec2 a_texcoord;
-  
-    uniform mat4 u_projection;
-    uniform mat4 u_view;
-    uniform mat4 u_world;
-    uniform vec3 u_viewWorldPosition;
-  
-    varying vec3 v_normal;
-    varying vec3 v_surfaceToView;
-    varying vec2 v_texcoord;
-  
-    void main() {
-      vec4 worldPosition = u_world * a_position;
-      gl_Position = u_projection * u_view * worldPosition;
-      v_surfaceToView = u_viewWorldPosition - worldPosition.xyz;
-      v_normal = mat3(u_world) * a_normal;
-      v_texcoord = a_texcoord;
-    }
-  </script>
-  <!-- fragment shader -->
-  <script id="3d-fragment-shader" type="x-shader/x-fragment">
-    precision highp float;
-  
-    varying vec3 v_normal;
-    varying vec3 v_surfaceToView;
-    varying vec2 v_texcoord;
-  
-    uniform vec3 diffuse;
-    uniform vec3 ambient;
-    uniform vec3 emissive;
-    uniform vec3 specular;
-    uniform float shininess;
-    uniform float opacity;
-    uniform vec3 u_lightDirection;
-    uniform vec3 u_ambientLight;
-    uniform vec3 u_colorLight;
-    uniform sampler2D diffuseMap;
-  
-    void main () {
-      vec3 normal = normalize(v_normal);
-  
-      vec3 surfaceToViewDirection = normalize(v_surfaceToView);
-      vec3 halfVector = normalize(u_lightDirection + surfaceToViewDirection);
-  
-      float fakeLight = dot(u_lightDirection, normal) * .5 + .5;
-      float specularLight = clamp(dot(normal, halfVector), 0.0, 1.0);
-  
-      vec4 diffuseMapColor = texture2D(diffuseMap, v_texcoord);
-      vec3 effectiveDiffuse = diffuse * diffuseMapColor.rgb * u_colorLight.rgb;
-      float effectiveOpacity = opacity * diffuseMapColor.a;
-  
-      gl_FragColor = vec4(
-          emissive +
-          ambient * u_ambientLight +
-          effectiveDiffuse * fakeLight +
-          specular * pow(specularLight, shininess),
-          effectiveOpacity);
-    }
-  </script>
-  <script src="https://webglfundamentals.org/webgl/resources/webgl-lessons-ui.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- CSS-->
+		<link rel="stylesheet" type="text/css" href="style.css">
 
-  <script type="text/javascript" src="libs/webgl-utils.js"></script>
-  <script type="text/javascript" src="libs/glm_utils.js"></script>
-  <script type="text/javascript" src="libs/m4.js"></script>
-  <script type="text/javascript" src="libs/mesh_utils.js"></script>
-  <script type="text/javascript" src="libs/jquery-3.6.0.js"></script>
- 
-  <script type="text/javascript" src="load_mesh.js"></script>
-  <script type="text/javascript" src="scene.js"></script>
+		<!-- Libraries-->
+		<script src="libs/dat.gui.js" defer></script>
+		<script src="libs/glm_utils.js" defer></script>
+		<script src="libs/jquery-3.6.0.js" defer></script>
+		<script src="libs/load_mesh.js" defer></script>
+		<script src="libs/m4.js" defer></script>
+		<script src="libs/mesh_utils.js" defer></script>
+		<script src="libs/webgl-utils.js" defer></script>
 
-  
+		<script src="room/room.js" defer></script>
+		<script src="room/shadows.js" defer></script>
+		<script src="room/render.js" defer></script>
+		<script src="room/camera.js" defer></script>
+		<script src="room/mesh.js" defer></script>
+		<script src="utils.js" defer></script>
+		<script src="main.js" defer></script>
+
+
+		<script id="base-vertex-shader" type="x-shader/x-vertex">
+			attribute vec4 a_position;
+			attribute vec3 a_normal;
+			attribute vec2 a_texcoord;
+			attribute vec4 a_color;
+
+			uniform mat4 u_projection;          // Projection Matrix
+			uniform mat4 u_view;				// Camera View Matrix
+			uniform mat4 u_world;				// World matrix
+			uniform vec3 u_viewWorldPosition;	// Camera position
+
+			varying vec3 v_normal;
+			varying vec3 v_surfaceToView;
+			varying vec2 v_texcoord;
+			varying vec4 v_color;
+
+
+			void main() {
+				vec4 world_position = u_world * a_position;  // World transform
+				gl_Position = u_projection * u_view * world_position; // Transform the location of the vertex
+				v_surfaceToView = u_viewWorldPosition - world_position.xyz;
+				v_normal = mat3(u_world) * a_normal;
+				v_texcoord = a_texcoord;
+				v_color = a_color;
+			}
+		</script>
+		<script id="base-fragment-shader" type="x-shader/x-fragment">
+			precision highp float;
+
+			varying vec3 v_normal;
+			varying vec2 v_texcoord;
+			varying vec4 v_color;
+			varying vec3 v_surfaceToView;
+
+
+			// Material Properties
+			uniform sampler2D diffuseMap;
+			uniform sampler2D normalMap;
+			uniform vec3 diffuse;
+			uniform vec3 ambient;
+			uniform vec3 emissive;
+			uniform vec3 specular;
+			uniform float shininess;
+			uniform float opacity;
+
+			// Light Properties
+			uniform vec3 u_lightDirection;
+			uniform vec3 u_lightColor;
+			uniform vec3 u_ambientLight;
+
+			void main () {
+				vec3 normal = normalize(v_normal);
+
+				vec3 surfaceToViewDirection = normalize(v_surfaceToView);
+    			vec3 halfVector = normalize(u_lightDirection + surfaceToViewDirection);
+
+				float fakeLight = dot(u_lightDirection, normal) * .5 + .5;
+    			float specularLight = clamp(dot(normal, halfVector), 0.0, 1.0);
+
+    			vec4 diffuseMapColor = texture2D(diffuseMap, v_texcoord);
+    			vec3 effectiveDiffuse = diffuse * diffuseMapColor.rgb * u_lightColor.rgb * v_color.rgb;
+    			float effectiveOpacity = opacity * diffuseMapColor.a * v_color.a;
+
+				gl_FragColor = vec4(
+					emissive +
+					ambient * u_ambientLight +
+					effectiveDiffuse * fakeLight +
+					specular * pow(specularLight, shininess),
+					effectiveOpacity);
+			}
+		</script>
+
+
+		<script id="skybox-vertex-shader" type="x-shader/x-vertex">
+			attribute vec4 a_position;
+			varying vec4 v_position;
+
+			void main() {
+				v_position = a_position;
+				gl_Position = vec4(a_position.xy, 1, 1);
+			}
+		</script>
+		<script id="skybox-fragment-shader" type="x-shader/x-fragment">
+			precision mediump float;
+
+			uniform samplerCube u_skybox;
+			uniform mat4 u_viewDirectionProjectionInverse;
+
+			uniform vec3 u_lightColor;
+
+			varying vec4 v_position;
+			void main() {
+				vec4 t = u_viewDirectionProjectionInverse * v_position;
+				gl_FragColor = textureCube(u_skybox, normalize(t.xyz / t.w)) * vec4(u_lightColor,1);
+			}
+		</script>
+
+
+		<script  id="vertex-shader-3d" type="x-shader/x-vertex">
+			attribute vec4 a_position;
+			attribute vec2 a_texcoord;
+			attribute vec3 a_normal;
+			attribute vec4 a_color;
+
+
+			uniform mat4 u_projection;
+			uniform mat4 u_view;
+			uniform mat4 u_world;
+			uniform mat4 u_textureMatrix;
+
+			varying vec2 v_texcoord;
+			varying vec4 v_projectedTexcoord;
+			varying vec3 v_normal;
+			varying vec4 v_color;
+
+			void main() {
+				// Multiply the position by the matrix.
+				vec4 worldPosition = u_world * a_position;
+
+				gl_Position = u_projection * u_view * worldPosition;
+
+				// Pass the texture coord to the fragment shader.
+				v_texcoord = a_texcoord;
+
+				v_projectedTexcoord = u_textureMatrix * worldPosition;
+
+				// orient the normals and pass to the fragment shader
+				v_normal = mat3(u_world) * a_normal;
+
+				v_color = a_color;
+			}
+		</script>
+		<script  id="fragment-shader-3d" type="x-shader/x-fragment">
+			precision mediump float;
+
+			// Passed in from the vertex shader.
+			varying vec2 v_texcoord;
+			varying vec4 v_projectedTexcoord;
+			varying vec3 v_normal;
+			varying vec4 v_color;
+
+			uniform vec4 u_colorMult;
+			uniform sampler2D u_texture;
+			uniform sampler2D u_projectedTexture;
+			uniform float u_bias;
+			uniform vec3 u_reverseLightDirection;
+
+			// Material Properties
+			uniform sampler2D diffuseMap;
+			uniform sampler2D normalMap;
+			uniform vec3 diffuse;
+			uniform vec3 ambient;
+			uniform vec3 emissive;
+			uniform vec3 specular;
+			uniform float shininess;
+			uniform float opacity;
+
+			void main() {
+				// because v_normal is a varying it's interpolated
+				// so it will not be a unit vector. Normalizing it
+				// will make it a unit vector again
+				vec3 normal = normalize(v_normal);
+
+				float light = dot(normal, u_reverseLightDirection);
+
+				vec3 projectedTexcoord = v_projectedTexcoord.xyz / v_projectedTexcoord.w;
+				float currentDepth = projectedTexcoord.z + u_bias;
+
+				bool inRange =
+				projectedTexcoord.x >= 0.0 &&
+				projectedTexcoord.x <= 1.0 &&
+				projectedTexcoord.y >= 0.0 &&
+				projectedTexcoord.y <= 1.0;
+
+				// the 'r' channel has the depth values
+				float projectedDepth = texture2D(u_projectedTexture, projectedTexcoord.xy).r;
+				float shadowLight = (inRange && projectedDepth <= currentDepth) ? 0.0 : 1.0;
+
+				vec4 diffuseMapColor = texture2D(diffuseMap, v_texcoord);
+    			vec3 effectiveDiffuse = diffuse * diffuseMapColor.rgb  * v_color.rgb;
+    			float effectiveOpacity = opacity * diffuseMapColor.a * v_color.a;
+
+				vec4 texColor = texture2D(u_texture, v_texcoord) * u_colorMult;
+
+				gl_FragColor = vec4(
+					effectiveDiffuse.rgb * light * shadowLight,
+					effectiveOpacity);
+			}
+		</script>
+
+
+		<script  id="color-vertex-shader" type="x-shader/x-vertex">
+			attribute vec4 a_position;
+
+			uniform mat4 u_projection;
+			uniform mat4 u_view;
+			uniform mat4 u_world;
+
+			void main() {
+				// Multiply the position by the matrices.
+				gl_Position = u_projection * u_view * u_world * a_position;
+			}
+		</script>
+		<script  id="color-fragment-shader" type="x-shader/x-fragment">
+			precision mediump float;
+
+			uniform vec4 u_color;
+			void main() {
+				gl_FragColor = u_color;
+			}
+		</script>
+
+
+	</head>
+
+	<body>
+		<div class="row">
+
+			<div id="main" class="column1">
+				<canvas id="canvas" height="1000px" width="1000px"></canvas>
+			</div>
+
+			<div class="menu column2">
+				<div class="title">
+					WebGL WebApp
+				</div>
+				<p></p>
+				<div>
+					Progetto sviluppato per il corso di Computer Graphics UniBO A.A 2021/2022.
+				</div>
+				<br>
+
+			</div>
+
+			<div class="menu column2">
+				<div class = "menu-row">
+					<details>
+						<summary class="title">
+							Camera
+						</summary>
+
+						<button class="btn" onmouseup="scene.switch_camera();">
+							Switch Camera
+						</button>
+
+						<button class="btn" onmouseup="scene.camera.reset();">
+							Align
+						</button>
+
+						<details>
+							<summary class="title">
+								Touch
+							</summary>
+							<div>
+								<canvas id="canvas2d" style="width: 190px; height: 95px "></canvas>
+							</div>
+
+							Touch the canvas to rotate the camera.
+
+						</details>
+
+						<details>
+							<summary class="title">
+								Keyboard
+							</summary>
+							<p style="text-align: left">
+								<b>W/S</b> : move forward/backward <br>
+								<b>A/D</b> : move left/right <br>
+								<b>Q/E</b> : move up/down <br>
+								<b>U/J</b> : move up/down <br>
+								<b>H/K</b> : cant movement <br>
+								<b>Arrow UP/DOWN</b> : tilt movement<br>
+								<b>Arrow LEFT/RIGHT</b> : pan movement <br>
+								<b>R : realign camera</b>
+							</p>
+
+						</details>
+
+					</details>
+
+				</div>
+			</div>
+
+			<div class="menu column2">
+				<details>
+					<summary class="title">
+						Settings
+					</summary>
+					<div id ="gui">
+					</div>
+
+				</details>
+
+			</div>
+
+
+
+
+
+
+		</div>
+
+	</body>
+
 </html>

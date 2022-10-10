@@ -1,5 +1,5 @@
 /*
- * Copyright 2012, Gregg Tavares.
+ * Copyright 2021 GFXFundamentals.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -12,7 +12,7 @@
  * copyright notice, this list of conditions and the following disclaimer
  * in the documentation and/or other materials provided with the
  * distribution.
- *     * Neither the name of Gregg Tavares. nor the names of his
+ *     * Neither the name of GFXFundamentals. nor the names of his
  * contributors may be used to endorse or promote products derived from
  * this software without specific prior written permission.
  *
@@ -53,7 +53,7 @@
 
   if (!isInIFrame()) {
     console.log("%c%s", 'color:blue;font-weight:bold;', 'for more about webgl-utils.js see:');  // eslint-disable-line
-    console.log("%c%s", 'color:blue;font-weight:bold;', 'http://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html');  // eslint-disable-line
+    console.log("%c%s", 'color:blue;font-weight:bold;', 'https://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html');  // eslint-disable-line
   }
 
   /**
@@ -103,7 +103,7 @@
     if (!compiled) {
       // Something went wrong during compilation; get the error
       const lastError = gl.getShaderInfoLog(shader);
-      errFn('*** Error compiling shader \'' + shader + '\':' + lastError);
+      errFn('*** Error compiling shader \'' + shader + '\':' + lastError + `\n` + shaderSource.split('\n').map((l,i) => `${i + 1}: ${l}`).join('\n'));
       gl.deleteShader(shader);
       return null;
     }
@@ -121,8 +121,7 @@
    *        on error. If you want something else pass an callback. It's passed an error message.
    * @memberOf module:webgl-utils
    */
-  function createProgram(
-      gl, shaders, opt_attribs, opt_locations, opt_errorCallback) {
+  function createProgram(gl, shaders, opt_attribs, opt_locations, opt_errorCallback) {
     const errFn = opt_errorCallback || error;
     const program = gl.createProgram();
     shaders.forEach(function(shader) {
@@ -420,7 +419,7 @@
    *     let tex1 = gl.createTexture();
    *     let tex2 = gl.createTexture();
    *
-   *     ... assume we setup the textures with data ...
+   *     ... assume we setup the textures with models ...
    *
    *     let uniforms = {
    *       u_someSampler: tex1,
@@ -487,14 +486,16 @@
    *        uniforms.
    * @memberOf module:webgl-utils
    */
-  function setUniforms(setters, values) {
+  function setUniforms(setters, ...values) {
     setters = setters.uniformSetters || setters;
-    Object.keys(values).forEach(function(name) {
-      const setter = setters[name];
-      if (setter) {
-        setter(values[name]);
-      }
-    });
+    for (const uniforms of values) {
+      Object.keys(uniforms).forEach(function(name) {
+        const setter = setters[name];
+        if (setter) {
+          setter(uniforms[name]);
+        }
+      });
+    }
   }
 
   /**
@@ -512,10 +513,30 @@
 
     function createAttribSetter(index) {
       return function(b) {
-          gl.bindBuffer(gl.ARRAY_BUFFER, b.buffer);
-          gl.enableVertexAttribArray(index);
-          gl.vertexAttribPointer(
-              index, b.numComponents || b.size, b.type || gl.FLOAT, b.normalize || false, b.stride || 0, b.offset || 0);
+          if (b.value) {
+            gl.disableVertexAttribArray(index);
+            switch (b.value.length) {
+              case 4:
+                gl.vertexAttrib4fv(index, b.value);
+                break;
+              case 3:
+                gl.vertexAttrib3fv(index, b.value);
+                break;
+              case 2:
+                gl.vertexAttrib2fv(index, b.value);
+                break;
+              case 1:
+                gl.vertexAttrib1fv(index, b.value);
+                break;
+              default:
+                throw new Error('the length of a float constant value must be between 1 and 4!');
+            }
+          } else {
+            gl.bindBuffer(gl.ARRAY_BUFFER, b.buffer);
+            gl.enableVertexAttribArray(index);
+            gl.vertexAttribPointer(
+                index, b.numComponents || b.size, b.type || gl.FLOAT, b.normalize || false, b.stride || 0, b.offset || 0);
+          }
         };
     }
 
@@ -560,8 +581,8 @@
    * Properties of attribs. For each attrib you can add
    * properties:
    *
-   * *   type: the type of data in the buffer. Default = gl.FLOAT
-   * *   normalize: whether or not to normalize the data. Default = false
+   * *   type: the type of models in the buffer. Default = gl.FLOAT
+   * *   normalize: whether or not to normalize the models. Default = false
    * *   stride: the stride. Default = 0
    * *   offset: offset into the buffer. Default = 0
    *
@@ -691,8 +712,8 @@
    *         gl, ["some-vs", "some-fs"]);
    *
    *     let arrays = {
-   *       position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
-   *       texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
+   *       position: { numComponents: 3, models: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
+   *       texcoord: { numComponents: 2, models: [0, 0, 0, 1, 1, 0, 1, 1],                 },
    *     };
    *
    *     let bufferInfo = createBufferInfoFromArrays(gl, arrays);
@@ -924,25 +945,25 @@
    * @property {number} [numComponents] the number of components for this attribute.
    * @property {number} [size] the number of components for this attribute.
    * @property {number} [type] the type of the attribute (eg. `gl.FLOAT`, `gl.UNSIGNED_BYTE`, etc...) Default = `gl.FLOAT`
-   * @property {boolean} [normalized] whether or not to normalize the data. Default = false
+   * @property {boolean} [normalized] whether or not to normalize the models. Default = false
    * @property {number} [offset] offset into buffer in bytes. Default = 0
    * @property {number} [stride] the stride in bytes per element. Default = 0
-   * @property {WebGLBuffer} buffer the buffer that contains the data for this attribute
+   * @property {WebGLBuffer} buffer the buffer that contains the models for this attribute
    * @memberOf module:webgl-utils
    */
 
 
   /**
-   * Creates a set of attribute data and WebGLBuffers from set of arrays
+   * Creates a set of attribute models and WebGLBuffers from set of arrays
    *
    * Given
    *
    *      let arrays = {
-   *        position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
-   *        texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
-   *        normal:   { numComponents: 3, data: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],     },
-   *        color:    { numComponents: 4, data: [255, 255, 255, 255, 255, 0, 0, 255, 0, 0, 255, 255], type: Uint8Array, },
-   *        indices:  { numComponents: 3, data: [0, 1, 2, 1, 2, 3],                       },
+   *        position: { numComponents: 3, models: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
+   *        texcoord: { numComponents: 2, models: [0, 0, 0, 1, 1, 0, 1, 1],                 },
+   *        normal:   { numComponents: 3, models: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],     },
+   *        color:    { numComponents: 4, models: [255, 255, 255, 255, 255, 0, 0, 255, 0, 0, 255, 255], type: Uint8Array, },
+   *        indices:  { numComponents: 3, models: [0, 1, 2, 1, 2, 3],                       },
    *      };
    *
    * returns something like
@@ -967,28 +988,72 @@
     Object.keys(mapping).forEach(function(attribName) {
       const bufferName = mapping[attribName];
       const origArray = arrays[bufferName];
-      const array = makeTypedArray(origArray, bufferName);
-      attribs[attribName] = {
-        buffer:        createBufferFromTypedArray(gl, array),
-        numComponents: origArray.numComponents || array.numComponents || guessNumComponentsFromName(bufferName),
-        type:          getGLTypeForTypedArray(gl, array),
-        normalize:     getNormalizationForTypedArray(array),
-      };
+      if (origArray.value) {
+        attribs[attribName] = {
+          value: origArray.value,
+        };
+      } else {
+        const array = makeTypedArray(origArray, bufferName);
+        attribs[attribName] = {
+          buffer:        createBufferFromTypedArray(gl, array),
+          numComponents: origArray.numComponents || array.numComponents || guessNumComponentsFromName(bufferName),
+          type:          getGLTypeForTypedArray(gl, array),
+          normalize:     getNormalizationForTypedArray(array),
+        };
+      }
     });
     return attribs;
+  }
+
+  function getArray(array) {
+    return array.length ? array : array.data;
+  }
+
+  const texcoordRE = /coord|texture/i;
+  const colorRE = /color|colour/i;
+
+  function guessNumComponentsFromName(name, length) {
+    let numComponents;
+    if (texcoordRE.test(name)) {
+      numComponents = 2;
+    } else if (colorRE.test(name)) {
+      numComponents = 4;
+    } else {
+      numComponents = 3;  // position, normals, indices ...
+    }
+
+    if (length % numComponents > 0) {
+      throw new Error(`Can not guess numComponents for attribute '${name}'. Tried ${numComponents} but ${length} values is not evenly divisible by ${numComponents}. You should specify it.`);
+    }
+
+    return numComponents;
+  }
+
+  function getNumComponents(array, arrayName) {
+    return array.numComponents || array.size || guessNumComponentsFromName(arrayName, getArray(array).length);
   }
 
   /**
    * tries to get the number of elements from a set of arrays.
    */
+  const positionKeys = ['position', 'positions', 'a_position'];
   function getNumElementsFromNonIndexedArrays(arrays) {
-    const key = Object.keys(arrays)[0];
-    const array = arrays[key];
-    if (isArrayBuffer(array)) {
-      return array.numElements;
-    } else {
-      return array.data.length / array.numComponents;
+    let key;
+    for (const k of positionKeys) {
+      if (k in arrays) {
+        key = k;
+        break;
+      }
     }
+    key = key || Object.keys(arrays)[0];
+    const array = arrays[key];
+    const length = getArray(array).length;
+    const numComponents = getNumComponents(array, key);
+    const numElements = length / numComponents;
+    if (length % numComponents > 0) {
+      throw new Error(`numComponents ${numComponents} not correct for length ${length}`);
+    }
+    return numElements;
   }
 
   /**
@@ -1009,10 +1074,10 @@
    * Given an object like
    *
    *     let arrays = {
-   *       position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
-   *       texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
-   *       normal:   { numComponents: 3, data: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],     },
-   *       indices:  { numComponents: 3, data: [0, 1, 2, 1, 2, 3],                       },
+   *       position: { numComponents: 3, models: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
+   *       texcoord: { numComponents: 2, models: [0, 0, 0, 1, 1, 0, 1, 1],                 },
+   *       normal:   { numComponents: 3, models: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],     },
+   *       indices:  { numComponents: 3, models: [0, 1, 2, 1, 2, 3],                       },
    *     };
    *
    *  Creates an BufferInfo like this
@@ -1087,7 +1152,7 @@
    *     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);
    *
    * @param {WebGLRenderingContext} gl A WebGLRenderingContext
-   * @param {Object.<string, array|object|typedarray>} arrays Your data
+   * @param {Object.<string, array|object|typedarray>} arrays Your models
    * @param {Object.<string, string>} [opt_mapping] an optional mapping of attribute to array name.
    *    If not passed in it's assumed the array names will be mapped to an attribute
    *    of the same name with "a_" prefixed to it. An other words.
@@ -1183,8 +1248,8 @@
    * Calls `gl.drawElements` or `gl.drawArrays`, whichever is appropriate
    *
    * normally you'd call `gl.drawElements` or `gl.drawArrays` yourself
-   * but calling this means if you switch from indexed data to non-indexed
-   * data you don't have to remember to update your draw call.
+   * but calling this means if you switch from indexed models to non-indexed
+   * models you don't have to remember to update your draw call.
    *
    * @param {WebGLRenderingContext} gl A WebGLRenderingContext
    * @param {module:webgl-utils.BufferInfo} bufferInfo as returned from createBufferInfoFromArrays
