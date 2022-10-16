@@ -22,6 +22,12 @@ let light = {
 //insert object
 let obj_list = [];
 
+/*let provaTot=[]
+provaTot.path = "./obj/provaTot/provaTot.obj";
+provaTot.mtl = "./obj/provaTot/provaTot.mtl";
+provaTot.position = [0,0,0];
+
+obj_list.push(provaTot);*/
 let bed = []
 bed.path = "./obj/bed/bed.obj"
 bed.mtl = "./obj/bed/bed.mtl"
@@ -32,8 +38,46 @@ room.path = "./obj/room/room.obj"
 room.mtl = "./obj/room/room.mtl"
 room.position = [0, 0, 0]
 
+let brain = []
+brain.path = "./obj/brain/brain.obj"
+brain.mtl = "./obj/brain/brain.mtl"
+brain.position = [0, 0, 3]
+brain.rotate = true;
+
+let orologio = []
+orologio.path = "./obj/orologio/orologio.obj"
+orologio.mtl = "./obj/orologio/orologio.mtl"
+orologio.position = [0, 0, 0]
+
+let vetro = []
+vetro.path = "./obj/vetro/vetro.obj"
+vetro.mtl = "./obj/vetro/vetro.mtl"
+vetro.position = [0, 0, 0]
+
+let lampadario = []
+lampadario.path = "./obj/lampadario/lampadario.obj"
+lampadario.mtl = "./obj/lampadario/lampadario.mtl"
+lampadario.position = [0, 0, 0]
+
+let calendario = []
+calendario.path = "./obj/calendario/calendario.obj"
+calendario.mtl = "./obj/calendario/calendario.mtl"
+calendario.position = [0, 0, 0]
+
+let vetro1 = []
+vetro1.path = "./obj/vetro1/vetro1.obj"
+vetro1.mtl = "./obj/vetro1/vetro1.mtl"
+vetro1.position = [0, 0, 0]
+
 obj_list.push(bed);
 obj_list.push(room);
+obj_list.push(brain);
+//obj_list.push(orologio);
+//obj_list.push(vetro);
+//obj_list.push(lampadario);
+//obj_list.push(calendario);
+//obj_list.push(vetro1);
+
 
 let scene = new Room(obj_list);
 window.addEventListener('keydown', (e) => {scene.keys[e.key] = true;});
