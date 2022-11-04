@@ -22,7 +22,7 @@ function render() {
         const lightWorldMatrix = m4.lookAt(
             light.position,       // position
             light.direction,      // target
-            [0, 1, 0],                  // up
+            [0, 1, 0],              // up
         );
 
         const lightProjectionMatrix = m4.perspective(
@@ -66,6 +66,8 @@ function render() {
             u_projectedTexture: scene.shadows.depthTexture,
             u_reverseLightDirection: lightWorldMatrix.slice(8, 11),
             u_worldCameraPosition: scene.camera.getPosition(),
+            u_lightPosition: light.position,
+            u_lightColor: light.color,
         };
 
         scene.mesh_list.forEach(m => {

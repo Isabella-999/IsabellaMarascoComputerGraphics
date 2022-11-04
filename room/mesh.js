@@ -1,10 +1,9 @@
 class Mesh {
     constructor(obj,gl) {
         this.position = obj.position;       // Where to move the mesh once loaded
-
-        this.obj = [];                         // This object stores all the mesh information
-        this.obj.sourceMesh = obj.path; // .sourceMesh is used in load_mesh.js
-        this.obj.fileMTL = obj.mtl;    // .fileMTL is used in load_mesh.js
+        this.obj = [];                      // This object stores all the mesh information
+        this.obj.sourceMesh = obj.path;     // .sourceMesh is used in load_mesh.js
+        this.obj.fileMTL = obj.mtl;         // .fileMTL is used in load_mesh.js
 
         if (obj.rotate){ // Used for world matrix transform
             this.rotate = obj.rotate;
@@ -29,7 +28,6 @@ class Mesh {
             let y = this.position[1]
             let x = this.position[0]
 
-    
             this.obj.data.geometries.forEach(geom => {
                 // Moving the mesh to the initial position.
                 for (let i = 0; i < geom.data.position.length; i = i+3) {

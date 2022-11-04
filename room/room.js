@@ -7,11 +7,8 @@ class Room {
         });
 
         this.shadows = Shadows()
-        this.camera = new Camera([7,3,0], [0, 3, 0], [0, 1, 0]);
+        this.camera = new Camera([4,3,7], [0, 3, 0], [0, 1, 0]);
         this.keys = {};
-
-
-
     }
 
     // Compute the projection matrix
@@ -58,7 +55,6 @@ class Room {
             this.camera.reset()
         }
     }
-
 
     toggle_shadows(){
         this.shadow.enable = !this.shadow.enable;

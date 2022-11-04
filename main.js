@@ -22,12 +22,6 @@ let light = {
 //insert object
 let obj_list = [];
 
-/*let provaTot=[]
-provaTot.path = "./obj/provaTot/provaTot.obj";
-provaTot.mtl = "./obj/provaTot/provaTot.mtl";
-provaTot.position = [0,0,0];
-
-obj_list.push(provaTot);*/
 let bed = []
 bed.path = "./obj/bed/bed.obj"
 bed.mtl = "./obj/bed/bed.mtl"
@@ -49,11 +43,6 @@ orologio.path = "./obj/orologio/orologio.obj"
 orologio.mtl = "./obj/orologio/orologio.mtl"
 orologio.position = [0, 0, 0]
 
-let vetro = []
-vetro.path = "./obj/vetro/vetro.obj"
-vetro.mtl = "./obj/vetro/vetro.mtl"
-vetro.position = [0, 0, 0]
-
 let lampadario = []
 lampadario.path = "./obj/lampadario/lampadario.obj"
 lampadario.mtl = "./obj/lampadario/lampadario.mtl"
@@ -64,19 +53,25 @@ calendario.path = "./obj/calendario/calendario.obj"
 calendario.mtl = "./obj/calendario/calendario.mtl"
 calendario.position = [0, 0, 0]
 
-let vetro1 = []
-vetro1.path = "./obj/vetro1/vetro1.obj"
-vetro1.mtl = "./obj/vetro1/vetro1.mtl"
-vetro1.position = [0, 0, 0]
+let cestino = []
+cestino.path = "./obj/cestino/cestino.obj"
+cestino.mtl = "./obj/cestino/cestino.mtl"
+cestino.position = [0, 0, 0]
+
+let portaOggetti = []
+portaOggetti.path = "./obj/portaOggetti/portaOggetti.obj"
+portaOggetti.mtl = "./obj/portaOggetti/portaOggetti.mtl"
+portaOggetti.position = [0, 0, 0]
 
 obj_list.push(bed);
 obj_list.push(room);
 obj_list.push(brain);
-//obj_list.push(orologio);
-//obj_list.push(vetro);
-//obj_list.push(lampadario);
-//obj_list.push(calendario);
-//obj_list.push(vetro1);
+obj_list.push(orologio);
+obj_list.push(lampadario);
+obj_list.push(calendario);
+obj_list.push(cestino);
+obj_list.push(portaOggetti);
+
 
 
 let scene = new Room(obj_list);

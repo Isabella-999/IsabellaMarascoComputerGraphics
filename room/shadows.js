@@ -14,14 +14,14 @@ function Shadows(){
     gl.bindTexture(gl.TEXTURE_2D, shadow.depthTexture);
     gl.texImage2D(
         gl.TEXTURE_2D,                 // target
-        0,                                  // mip level
+        0,                             // mip level
         gl.DEPTH_COMPONENT,            // internal format
         shadow.depthTextureSize,       // width
         shadow.depthTextureSize,       // height
-        0,                                  // border
+        0,                             // border
         gl.DEPTH_COMPONENT,            // format
         gl.UNSIGNED_INT,               // type
-        null);                              // models
+        null);                         // models
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);

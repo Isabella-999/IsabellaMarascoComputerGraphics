@@ -78,7 +78,7 @@
 			uniform vec3 u_ambientLight;
 
 			void main () {
-				vec3 normal = normalize(v_normal);
+				vec3 normal = normalize(v_normal) * (float(gl_FrontFacing) * 2.0 - 1.0);
 
 				vec3 surfaceToViewDirection = normalize(v_surfaceToView);
     			vec3 halfVector = normalize(u_lightDirection + surfaceToViewDirection);
@@ -141,8 +141,11 @@
 			varying vec4 v_projectedTexcoord;
 			varying vec3 v_normal;
 			varying vec4 v_color;
+			varying vec3 vertPos;
 
 			void main() {
+				vertPos = vec3(u_world * a_position);
+
 				// Multiply the position by the matrix.
 				vec4 worldPosition = u_world * a_position;
 
@@ -167,12 +170,16 @@
 			varying vec4 v_projectedTexcoord;
 			varying vec3 v_normal;
 			varying vec4 v_color;
+			varying vec3 vertPos;
 
 			uniform vec4 u_colorMult;
 			uniform sampler2D u_texture;
 			uniform sampler2D u_projectedTexture;
 			uniform float u_bias;
 			uniform vec3 u_reverseLightDirection;
+			uniform vec3 u_ligthPosition;
+			uniform vec3 u_lightColor;
+
 
 			// Material Properties
 			uniform sampler2D diffuseMap;
@@ -204,9 +211,11 @@
 				// the 'r' channel has the depth values
 				float projectedDepth = texture2D(u_projectedTexture, projectedTexcoord.xy).r;
 				float shadowLight = (inRange && projectedDepth <= currentDepth) ? 0.0 : 1.0;
+				vec3 N = normal;
+				vec3 L = normalize(u_ligthPosition - vertPos);
 
 				vec4 diffuseMapColor = texture2D(diffuseMap, v_texcoord);
-    			vec3 effectiveDiffuse = diffuse * diffuseMapColor.rgb  * v_color.rgb;
+    			vec3 effectiveDiffuse = diffuse * diffuseMapColor.rgb * u_lightColor.rgb * v_color.rgb ;
     			float effectiveOpacity = opacity * diffuseMapColor.a * v_color.a;
 
 				vec4 texColor = texture2D(u_texture, v_texcoord) * u_colorMult;
@@ -243,15 +252,9 @@
 	</head>
 
 	<body>
-		<div class="row">
-
-			<div id="main" class="column1">
-				<canvas id="canvas" height="1000px" width="1000px"></canvas>
-			</div>
-
-			<div class="menu column2">
+		<div class="col-md-12">
 				<div class="title">
-					WebGL WebApp
+					<h2>Progetto WebGL</h2>
 				</div>
 				<p></p>
 				<div>
@@ -321,13 +324,21 @@
 				</details>
 
 			</div>
+		
+			<div id="main" class="column1">
+				<canvas id="canvas" height="1000px" width="1000px"></canvas>
+			</div>
+
+		</div>	
+
+			
 
 
 
 
 
 
-		</div>
+	
 
 	</body>
 
