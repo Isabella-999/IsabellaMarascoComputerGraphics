@@ -42,6 +42,7 @@
 			varying vec3 v_surfaceToView;
 			varying vec2 v_texcoord;
 			varying vec4 v_color;
+			varying vec3 vertPos;
 
 
 			void main() {
@@ -51,8 +52,10 @@
 				v_normal = mat3(u_world) * a_normal;
 				v_texcoord = a_texcoord;
 				v_color = a_color;
+				vertPos = vec3(world_position);
 			}
 		</script>
+		
 		<script id="base-fragment-shader" type="x-shader/x-fragment">
 			precision highp float;
 
@@ -60,6 +63,7 @@
 			varying vec2 v_texcoord;
 			varying vec4 v_color;
 			varying vec3 v_surfaceToView;
+			varying vec3 vertPos;
 
 
 			// Material Properties
@@ -74,6 +78,7 @@
 
 			// Light Properties
 			uniform vec3 u_lightDirection;
+			uniform vec3 u_lightPosition;
 			uniform vec3 u_lightColor;
 			uniform vec3 u_ambientLight;
 
@@ -83,7 +88,10 @@
 				vec3 surfaceToViewDirection = normalize(v_surfaceToView);
     			vec3 halfVector = normalize(u_lightDirection + surfaceToViewDirection);
 
-				float fakeLight = dot(u_lightDirection, normal) * .5 + .5;
+				vec3 L = normalize(normalize(u_lightPosition) - vertPos);
+				float lambertian = max(dot(normal, L), 0.0);
+
+				float fakeLight = dot(normalize(u_lightDirection), normal) * .5 + .5;
     			float specularLight = clamp(dot(normal, halfVector), 0.0, 1.0);
 
     			vec4 diffuseMapColor = texture2D(diffuseMap, v_texcoord);
@@ -92,38 +100,12 @@
 
 				gl_FragColor = vec4(
 					emissive +
-					ambient * u_ambientLight +
+					ambient * u_ambientLight * lambertian +
 					effectiveDiffuse * fakeLight +
 					specular * pow(specularLight, shininess),
 					effectiveOpacity);
 			}
 		</script>
-
-
-		<script id="skybox-vertex-shader" type="x-shader/x-vertex">
-			attribute vec4 a_position;
-			varying vec4 v_position;
-
-			void main() {
-				v_position = a_position;
-				gl_Position = vec4(a_position.xy, 1, 1);
-			}
-		</script>
-		<script id="skybox-fragment-shader" type="x-shader/x-fragment">
-			precision mediump float;
-
-			uniform samplerCube u_skybox;
-			uniform mat4 u_viewDirectionProjectionInverse;
-
-			uniform vec3 u_lightColor;
-
-			varying vec4 v_position;
-			void main() {
-				vec4 t = u_viewDirectionProjectionInverse * v_position;
-				gl_FragColor = textureCube(u_skybox, normalize(t.xyz / t.w)) * vec4(u_lightColor,1);
-			}
-		</script>
-
 
 		<script  id="vertex-shader-3d" type="x-shader/x-vertex">
 			attribute vec4 a_position;
@@ -144,15 +126,12 @@
 			varying vec3 vertPos;
 
 			void main() {
-				vertPos = vec3(u_world * a_position);
-
-				// Multiply the position by the matrix.
-				vec4 worldPosition = u_world * a_position;
+				vec4 worldPosition = u_world * a_position; // Multiply the position by the matrix.
+				vertPos = vec3(worldPosition);
 
 				gl_Position = u_projection * u_view * worldPosition;
 
-				// Pass the texture coord to the fragment shader.
-				v_texcoord = a_texcoord;
+				v_texcoord = a_texcoord; // Pass the texture coord to the fragment shader.
 
 				v_projectedTexcoord = u_textureMatrix * worldPosition;
 
@@ -177,7 +156,7 @@
 			uniform sampler2D u_projectedTexture;
 			uniform float u_bias;
 			uniform vec3 u_reverseLightDirection;
-			uniform vec3 u_ligthPosition;
+			uniform vec3 u_lightPosition;
 			uniform vec3 u_lightColor;
 
 
@@ -192,9 +171,6 @@
 			uniform float opacity;
 
 			void main() {
-				// because v_normal is a varying it's interpolated
-				// so it will not be a unit vector. Normalizing it
-				// will make it a unit vector again
 				vec3 normal = normalize(v_normal);
 
 				float light = dot(normal, u_reverseLightDirection);
@@ -210,9 +186,11 @@
 
 				// the 'r' channel has the depth values
 				float projectedDepth = texture2D(u_projectedTexture, projectedTexcoord.xy).r;
-				float shadowLight = (inRange && projectedDepth <= currentDepth) ? 0.0 : 1.0;
-				vec3 N = normal;
-				vec3 L = normalize(u_ligthPosition - vertPos);
+				float shadowLight = (inRange && projectedDepth <= currentDepth) ? 0.4 : 1.0;
+
+				vec3 L = normalize(u_lightPosition - vertPos);
+				float lambertian = max(dot(normal, L), 0.0);
+
 
 				vec4 diffuseMapColor = texture2D(diffuseMap, v_texcoord);
     			vec3 effectiveDiffuse = diffuse * diffuseMapColor.rgb * u_lightColor.rgb * v_color.rgb ;
@@ -221,7 +199,7 @@
 				vec4 texColor = texture2D(u_texture, v_texcoord) * u_colorMult;
 
 				gl_FragColor = vec4(
-					effectiveDiffuse.rgb * light * shadowLight,
+					effectiveDiffuse.rgb * lambertian * light * shadowLight,
 					effectiveOpacity);
 			}
 		</script>
@@ -264,6 +242,23 @@
 
 			</div>
 
+			
+			<div class="menu column2">
+				<details>
+					<summary class="title">
+						Settings
+					</summary>
+					<div id ="gui">
+					</div>
+
+				</details>
+
+			</div>
+		
+			<div id="main" class="column1">
+				<canvas id="canvas" height="1000px" width="1000px"></canvas>
+			</div>
+
 			<div class="menu column2">
 				<div class = "menu-row">
 					<details>
@@ -284,7 +279,7 @@
 								Touch
 							</summary>
 							<div>
-								<canvas id="canvas2d" style="width: 190px; height: 95px "></canvas>
+								<canvas id="canvas2d" style="width: 200px; height: 200px "></canvas>
 							</div>
 
 							Touch the canvas to rotate the camera.
@@ -296,14 +291,12 @@
 								Keyboard
 							</summary>
 							<p style="text-align: left">
-								<b>W/S</b> : move forward/backward <br>
-								<b>A/D</b> : move left/right <br>
-								<b>Q/E</b> : move up/down <br>
-								<b>U/J</b> : move up/down <br>
-								<b>H/K</b> : cant movement <br>
-								<b>Arrow UP/DOWN</b> : tilt movement<br>
-								<b>Arrow LEFT/RIGHT</b> : pan movement <br>
-								<b>R : realign camera</b>
+								<b> W/S:</b> avanti/indietro <br>
+								<b>A/D:</b> destra/sinistra</br>
+								<b>Q/E:</b> su/giù</br>
+								<b>Freccia su/giù: </b> inclinazione </br>
+								<b>Freccia destra/sinistra:</b> rotazione</br>
+								<b>R:</b> riallineare la camera</br>
 							</p>
 
 						</details>
@@ -311,22 +304,6 @@
 					</details>
 
 				</div>
-			</div>
-
-			<div class="menu column2">
-				<details>
-					<summary class="title">
-						Settings
-					</summary>
-					<div id ="gui">
-					</div>
-
-				</details>
-
-			</div>
-		
-			<div id="main" class="column1">
-				<canvas id="canvas" height="1000px" width="1000px"></canvas>
 			</div>
 
 		</div>	

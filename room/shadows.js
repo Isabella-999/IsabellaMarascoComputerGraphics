@@ -38,7 +38,7 @@ function Shadows(){
 
     // Shadow settings
     shadow.enable = false;
-    shadow.fov = 60;
+    shadow.fov = 9120;
     shadow.projWidth = 2;
     shadow.projHeight = 2;
     shadow.zFarProj = 20;

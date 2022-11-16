@@ -48,17 +48,6 @@ function add_dat_gui(scene){
     light_color.add(light.color, 1).min(0.1).max(1).step(0.05);
     light_color.add(light.color, 2).min(0.1).max(1).step(0.05);
 
-    let shadow_folder = gui.addFolder('Shadow frustum');
-    shadow_folder.add(scene.shadows, "fov").min(30).max(180).step(15);
-    shadow_folder.add(scene.shadows, "projWidth").min(1).max(10).step(1);
-    shadow_folder.add(scene.shadows, "projHeight").min(1).max(10).step(1);
-    shadow_folder.add(scene.shadows, "zFarProj").min(1).max(30).step(1);
-    shadow_folder.add(scene.shadows, "bias").min(-0.001).max(0).step(0.0001);
-
-    scene['Toggle frustum'] = function () {
-        scene.shadow.showFrustum = !scene.shadows.showFrustum;
-    };
-    shadow_folder.add(scene, 'Toggle frustum');
 
     document.getElementById("gui").append(gui.domElement)
 }

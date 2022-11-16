@@ -21,7 +21,7 @@ function render() {
     if(scene.shadows.enable){
         const lightWorldMatrix = m4.lookAt(
             light.position,       // position
-            light.direction,      // target
+            light.direction.map(l =>  -l),      // target
             [0, 1, 0],              // up
         );
 
@@ -124,12 +124,13 @@ function render() {
 
         const sharedUniforms = {
             u_ambientLight: [0.1, 0.1, 0.1],                          // Ambient
-            u_lightDirection: m4.normalize(light.direction),    // Light Direction
-            u_lightColor: light.color,                          // Light Color
+            u_lightDirection: m4.normalize(light.direction),          // Light Direction
+            u_lightColor: light.color,                                // Light Color
             u_view: scene.camera.getViewMatrix(),                     // View Matrix
             u_projection: scene.projectionMatrix(),                   // Projection Matrix
             u_viewWorldPosition: scene.camera.getPosition(),          // Camera position
             u_lightPosition: (light.position),
+            u_lightDirection: (light.direction),
         };
 
         scene.mesh_list.forEach(m => {

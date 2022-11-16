@@ -14,8 +14,8 @@ gl.enable(gl.DEPTH_TEST);
 let program = webglUtils.createProgramInfo(gl, ["base-vertex-shader", "base-fragment-shader"]);
 
 let light = {
-    position: [10,5,2],
-    direction : [1,1,1],
+    position: [0,8.8,0],
+    direction : [-1,1,0],
     color : [1.0, 1.0, 1.0],
 };
 
