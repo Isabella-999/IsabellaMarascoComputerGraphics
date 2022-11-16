@@ -35,7 +35,7 @@ room.position = [0, 0, 0]
 let brain = []
 brain.path = "./obj/brain/brain.obj"
 brain.mtl = "./obj/brain/brain.mtl"
-brain.position = [0, 0, 3]
+brain.position = [0, 0, 4]
 brain.rotate = true;
 
 let orologio = []
