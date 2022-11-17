@@ -230,92 +230,31 @@
 	</head>
 
 	<body>
-		<div class="col-md-12">
-				<div class="title">
-					<h2>Progetto WebGL</h2>
-				</div>
-				<p></p>
-				<div>
-					Progetto sviluppato per il corso di Computer Graphics UniBO A.A 2021/2022.
-				</div>
-				<br>
-
+		<div class = "menu column">
+			<div class="title">
+				<h2>Progetto WebGL</h2>
 			</div>
+			<p> 
+				<p>Progetto sviluppato da Isabella Marasco per il corso di Computer Graphics dell'Università di Bologna a.a. 2021/2022.</p>
+				<b> KEYWORD</b> <br>
+				<b> W/S:</b> avanti/indietro <br>
+				<b>A/D:</b> destra/sinistra</br>
+				<b>Q/E:</b> su/giù</br>
+				<b>Freccia su/giù: </b> inclinazione </br>
+				<b>Freccia destra/sinistra:</b> rotazione</br>
+				<b>R:</b> riallineare la camera</br>
+			</p>
 
-			
-			<div class="menu column2">
-				<details>
-					<summary class="title">
-						Settings
-					</summary>
-					<div id ="gui">
-					</div>
+			<p> 
+				<input type="checkbox" id="shadows" name="shadows" value="shadows" unchecked>
+				<label id="shadows"> <b>Ombre</b></label><br>
+				
+			</p>
+		</div>
 
-				</details>
-
-			</div>
-		
 			<div id="main" class="column1">
 				<canvas id="canvas" height="1000px" width="1000px"></canvas>
 			</div>
-
-			<div class="menu column2">
-				<div class = "menu-row">
-					<details>
-						<summary class="title">
-							Camera
-						</summary>
-
-						<button class="btn" onmouseup="scene.switch_camera();">
-							Switch Camera
-						</button>
-
-						<button class="btn" onmouseup="scene.camera.reset();">
-							Align
-						</button>
-
-						<details>
-							<summary class="title">
-								Touch
-							</summary>
-							<div>
-								<canvas id="canvas2d" style="width: 200px; height: 200px "></canvas>
-							</div>
-
-							Touch the canvas to rotate the camera.
-
-						</details>
-
-						<details>
-							<summary class="title">
-								Keyboard
-							</summary>
-							<p style="text-align: left">
-								<b> W/S:</b> avanti/indietro <br>
-								<b>A/D:</b> destra/sinistra</br>
-								<b>Q/E:</b> su/giù</br>
-								<b>Freccia su/giù: </b> inclinazione </br>
-								<b>Freccia destra/sinistra:</b> rotazione</br>
-								<b>R:</b> riallineare la camera</br>
-							</p>
-
-						</details>
-
-					</details>
-
-				</div>
-			</div>
-
-		</div>	
-
-			
-
-
-
-
-
-
-	
 
 	</body>
 

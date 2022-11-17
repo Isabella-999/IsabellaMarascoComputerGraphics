@@ -23,22 +23,24 @@ function resizeCanvasToDisplaySize(canvas) {
     return needResize;
 }
 
-function add_dat_gui(scene){
-    let gui = new dat.gui.GUI({autoPlace: false});
+/*function add_dat_gui(scene){
+    //let gui = new dat.gui.GUI({autoPlace: false});
 
-    scene['Toggle shadows'] = function () {
+    /*scene['Toggle shadows'] = function () {
         scene.toggle_shadows()
     };
+    
     gui.add(scene, 'Toggle shadows');
 
-    let light_folder = gui.addFolder('Light');
+    
+    /*let light_folder = gui.addFolder('Light');
 
     let light_position =  light_folder.addFolder('Position');
     light_position.add(light.position, 0).min(-10).max(10).step(0.25);
     light_position.add(light.position, 1).min(0).max(10).step(0.25);
-    light_position.add(light.position, 2).min(-10).max(10).step(0.25);
+    light_position.add(light.position, 2).min(-10).max(10).step(0.25);*/
 
-    let light_direction =  light_folder.addFolder('Direction');
+    /*let light_direction =  light_folder.addFolder('Direction');
     light_direction.add(light.direction, 0).min(-10).max(10).step(0.25);
     light_direction.add(light.direction, 1).min(-10).max(10).step(0.25);
     light_direction.add(light.direction, 2).min(-10).max(10).step(0.25);
@@ -46,14 +48,16 @@ function add_dat_gui(scene){
     let light_color =  light_folder.addFolder('Color');
     light_color.add(light.color, 0).min(0.1).max(1).step(0.05);
     light_color.add(light.color, 1).min(0.1).max(1).step(0.05);
-    light_color.add(light.color, 2).min(0.1).max(1).step(0.05);
+    light_color.add(light.color, 2).min(0.1).max(1).step(0.05);*/
 
 
-    document.getElementById("gui").append(gui.domElement)
-}
+    //document.getElementById("gui").append(gui.domElement)
+//}
 
 
-function canvas2DController(){
+
+
+/*function canvas2DController(){
     let canvas = document.getElementById("canvas2d");
     let context = canvas.getContext("2d");
 
@@ -89,7 +93,7 @@ function canvas2DController(){
     image.onload=function (){
         context.drawImage(this,  0, 0, image.width, image.height);
     }
-    image.src = './models/controllerImg.jpg';
+    //image.src = './models/controllerImg.jpg';
 
     function getXY(canvas, event){ //adjust mouse click to canvas coordinates
         const rect = canvas.getBoundingClientRect()
@@ -136,9 +140,4 @@ function canvas2DController(){
     canvas.onmousedown=touchDown;
     canvas.onmouseup=touchUp;
 }
-
-
-
-
-
-
+*/

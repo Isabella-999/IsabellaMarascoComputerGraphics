@@ -13,6 +13,7 @@ gl.enable(gl.DEPTH_TEST);
 
 let program = webglUtils.createProgramInfo(gl, ["base-vertex-shader", "base-fragment-shader"]);
 
+//light used for the room
 let light = {
     position: [0,8.8,0],
     direction : [-1,1,0],
@@ -78,8 +79,8 @@ let scene = new Room(obj_list);
 window.addEventListener('keydown', (e) => {scene.keys[e.key] = true;});
 window.addEventListener('keyup', (e) => {scene.keys[e.key] = false;});
 
-canvas2DController()
-add_dat_gui(scene);
+//canvas2DController()
+//add_dat_gui(scene);
 
 mouse = [];
 function mouseDown(e) {
@@ -116,12 +117,13 @@ canvas.onmouseup=mouseUp;
 canvas.mouseout=mouseUp;
 canvas.onmousemove=mouseMove;
 
+ //create check function 
+ function check() {
+    document.getElementById('shadows');
+    scene.shadows.enable = !scene.shadows.enable;
+  }
+
+// add event to checkbox #shadow
+document.getElementById('shadows').addEventListener('change', check);
 
 render(scene);
-
-
-
-
-
-
-
