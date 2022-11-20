@@ -13,6 +13,7 @@ gl.enable(gl.DEPTH_TEST);
 
 let program = webglUtils.createProgramInfo(gl, ["base-vertex-shader", "base-fragment-shader"]);
 
+
 //light used for the room
 let light = {
     position: [0,8.8,0],
@@ -126,4 +127,24 @@ canvas.onmousemove=mouseMove;
 // add event to checkbox #shadow
 document.getElementById('shadows').addEventListener('change', check);
 
+
+//2D canvas for text
+/*let textCanvas = document.getElementById('textCanvas');
+ctx = textCanvas.getContext('2d');
+makeTextCanvas(700, 500);*/
+
+let cameraCanvas = document.getElementById('canvas2d');
+ctx = cameraCanvas.getContext('2d');
+
+let cameraColumn = document.getElementById('canvas_column');
+let width = cameraColumn.getBoundingClientRect().width;
+let height = cameraColumn.getBoundingClientRect().height;
+makeTextCanvas(width, height);
+
+
+
 render(scene);
+
+
+
+

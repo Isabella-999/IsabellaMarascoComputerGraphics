@@ -23,40 +23,6 @@ function resizeCanvasToDisplaySize(canvas) {
     return needResize;
 }
 
-/*function add_dat_gui(scene){
-    //let gui = new dat.gui.GUI({autoPlace: false});
-
-    /*scene['Toggle shadows'] = function () {
-        scene.toggle_shadows()
-    };
-    
-    gui.add(scene, 'Toggle shadows');
-
-    
-    /*let light_folder = gui.addFolder('Light');
-
-    let light_position =  light_folder.addFolder('Position');
-    light_position.add(light.position, 0).min(-10).max(10).step(0.25);
-    light_position.add(light.position, 1).min(0).max(10).step(0.25);
-    light_position.add(light.position, 2).min(-10).max(10).step(0.25);*/
-
-    /*let light_direction =  light_folder.addFolder('Direction');
-    light_direction.add(light.direction, 0).min(-10).max(10).step(0.25);
-    light_direction.add(light.direction, 1).min(-10).max(10).step(0.25);
-    light_direction.add(light.direction, 2).min(-10).max(10).step(0.25);
-
-    let light_color =  light_folder.addFolder('Color');
-    light_color.add(light.color, 0).min(0.1).max(1).step(0.05);
-    light_color.add(light.color, 1).min(0.1).max(1).step(0.05);
-    light_color.add(light.color, 2).min(0.1).max(1).step(0.05);*/
-
-
-    //document.getElementById("gui").append(gui.domElement)
-//}
-
-
-
-
 /*function canvas2DController(){
     let canvas = document.getElementById("canvas2d");
     let context = canvas.getContext("2d");
@@ -141,3 +107,113 @@ function resizeCanvasToDisplaySize(canvas) {
     canvas.onmouseup=touchUp;
 }
 */
+
+
+
+// Canvas 2d 
+
+//draw text
+function makeTextCanvas() {
+    ctx.canvas.width = width;
+    ctx.canvas.height = height;
+    
+    ctx.font = "15px hidef";
+    //ctx.fillStyle = "black";
+
+    makeKeyCanvas();
+    return ctx.canvas;
+}
+
+
+//draw buttons
+function makeKeyCanvas() {
+    ctx.clearRect(0, 0, width, height);
+
+    var buttons = [];
+    buttons.push(makeButton(1, 100,100, 30, 30, 'S', '#21e6e3', 'black', 'black', function () { camera.moveForward(-0.1); }))
+    buttons.push(makeButton(2, 100, 20, 30, 30, 'W', '21e6e3', 'black', 'black', function () { camera.moveForward(0.1); }))
+    buttons.push(makeButton(3, 135, 60, 30, 30, 'D', '21e6e3', 'black', 'black', function () { camera.moveRight(0.1); }))
+    buttons.push(makeButton(4, 65, 60, 30, 30, 'E', '21e6e3', 'black', 'black', function () { camera.moveRight(-0.1); }))
+    buttons.push(makeButton(5, 10, 25, 50, 20, 'Reset', '21e6e3', 'black', 'black', function () { camera.reset(); }))
+
+    drawAll();
+    cameraCanvas.addEventListener("click", function (e) {
+        console.log(e);
+        if (ctx.isPointInPath(buttons[0], e.offsetX, e.offsetY)) {
+            scene.camera.moveForward(-0.1);
+        }
+        if (ctx.isPointInPath(buttons[1], e.offsetX, e.offsetY)) {
+            scene.camera.moveForward(0.1);
+        }
+        if (ctx.isPointInPath(buttons[2], e.offsetX, e.offsetY)) {
+            scene.camera.moveRight(0.1);
+        }
+        if (ctx.isPointInPath(buttons[3], e.offsetX, e.offsetY)) {
+            scene.camera.moveRight(-0.1);
+        }
+        if (ctx.isPointInPath(buttons[4], e.offsetX, e.offsetY)) {
+            scene.camera.reset();
+        }
+    });
+
+    cameraCanvas.addEventListener('touchstart', function (e) {
+        if (ctx.isPointInPath(buttons[0], e.offsetX, e.offsetY)) {
+            scene.camera.moveForward(-0.1);
+        }
+        if (ctx.isPointInPath(buttons[1], e.offsetX, e.offsetY)) {
+            scene.camera.moveForward(0.1);
+        }
+        if (ctx.isPointInPath(buttons[2], e.offsetX, e.offsetY)) {
+            scene.camera.moveRight(0.1);
+        }
+        if (ctx.isPointInPath(buttons[3], e.offsetX, e.offsetY)) {
+            scene.camera.moveRight(-0.1);
+        }
+        if (ctx.isPointInPath(buttons[4], e.offsetX, e.offsetY)) {
+            scene.camera.reset();
+        }
+    });
+
+    function makeButton(id, x, y, w, h, label, fill, stroke, labelcolor, clickFn, releaseFn) {
+        var button = new Path2D();
+        button.rect(x, y, w, h);
+        button.x = x;
+        button.y = y;
+        button.w = w;
+        button.h = h;
+        button.id = id;
+        button.label = label;
+        button.fill = fill;
+        button.stroke = stroke;
+        button.labelcolor = labelcolor;
+        button.clickFn = clickFn;
+        button.releaseFn = releaseFn;
+        return button;
+    }
+
+    function drawAll() {
+        for (var i = 0; i < buttons.length; i++) {
+            drawButton(buttons[i], false);
+        }
+    }
+
+    function drawButton(b, isDown) {
+        ctx.clearRect(b.x - 1, b.y - 1, b.w + 2, b.h + 2);
+        ctx.fillStyle = b.fill;
+        ctx.fillRect(b.x, b.y, b.w, b.h);
+        ctx.strokeStyle = b.stroke;
+        ctx.strokeRect(b.x, b.y, b.w, b.h);
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = b.labelcolor;
+        ctx.fillText(b.label, b.x + b.w / 2, b.y + b.h / 2);
+        if (isDown) {
+            ctx.beginPath();
+            ctx.moveTo(b.x, b.y + b.h);
+            ctx.lineTo(b.x, b.y);
+            ctx.lineTo(b.x + b.w, b.y);
+            ctx.strokeStyle = 'black';
+            ctx.stroke();
+        }
+    }
+}

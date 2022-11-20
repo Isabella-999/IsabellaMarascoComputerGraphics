@@ -37,10 +37,11 @@
     #canvas{
         max-height: 30vh;
     }
+ 
 }
 
 body {
-    background: rgb(33, 230, 227);
+    background: #21e6e3;
 }
 
 #canvas{
@@ -66,32 +67,8 @@ body {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
   }
 
-.menu-row{
-    text-align: center;
-}
-
-.btn {
-    padding: 4px 12px;
-    margin-top: 5px;
-    min-width: 88px;
-    border: none;
-    font: inherit;
-    color: #373030;
-    outline: none;
-    text-decoration: none;
-    cursor: default;
-    font-weight: 400;
-    background: #cbcbcb;
-    box-shadow: 0 0 1px rgba(0, 0, 0, 0.30), 0 1px 1px rgba(0, 0, 0, .4);
-}
-
 .title{
-    text-align: left;
+    text-align: center;
     font-weight: bold;
 }
 
-.btn:active {
-    background: linear-gradient(#626262, #626262);
-    color: #fff;
-    position: relative;
-}
