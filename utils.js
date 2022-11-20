@@ -130,11 +130,11 @@ function makeKeyCanvas() {
     ctx.clearRect(0, 0, width, height);
 
     var buttons = [];
-    buttons.push(makeButton(1, 100,100, 30, 30, 'S', '#21e6e3', 'black', 'black', function () { camera.moveForward(-0.1); }))
-    buttons.push(makeButton(2, 100, 20, 30, 30, 'W', '21e6e3', 'black', 'black', function () { camera.moveForward(0.1); }))
-    buttons.push(makeButton(3, 135, 60, 30, 30, 'D', '21e6e3', 'black', 'black', function () { camera.moveRight(0.1); }))
-    buttons.push(makeButton(4, 65, 60, 30, 30, 'E', '21e6e3', 'black', 'black', function () { camera.moveRight(-0.1); }))
-    buttons.push(makeButton(5, 10, 25, 50, 20, 'Reset', '21e6e3', 'black', 'black', function () { camera.reset(); }))
+    buttons.push(makeButton(1, 40,100, 30, 30, 'S', '#21e6e3', 'black', 'black', function () { camera.moveForward(-0.1); }))
+    buttons.push(makeButton(2, 40, 20, 30, 30, 'W', '21e6e3', 'black', 'black', function () { camera.moveForward(0.1); }))
+    buttons.push(makeButton(3, 75, 60, 30, 30, 'D', '21e6e3', 'black', 'black', function () { camera.moveRight(0.1); }))
+    buttons.push(makeButton(4, 5, 60, 30, 30, 'E', '21e6e3', 'black', 'black', function () { camera.moveRight(-0.1); }))
+    //buttons.push(makeButton(5, 10, 0, 50, 20, 'Reset', '21e6e3', 'black', 'black', function () { camera.getPosition(); }))
 
     drawAll();
     cameraCanvas.addEventListener("click", function (e) {
