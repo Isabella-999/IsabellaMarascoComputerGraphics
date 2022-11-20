@@ -4,29 +4,35 @@
 
 .column1 {
     float: left;
-    width: 93%;
+    width: 70%;
     padding: 10px;
 
 }
 
-.column {
-    margin:auto;
-    width: 80%;
+.column2 {
+    float: left;
+    width: 30%;
     padding: 10px;
-    max-width: 100%;
+    max-width: 29%;
 }
 
-/* reduce the cavas */
-.canvas {
-    width: 50%;
-    height: 50%;
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
 @media screen and (max-width: 600px) {
     .column1 {
         width: 100%;
     }
-  
+    .column2 {
+        width: 96.7%;
+        max-width: 96.7%;
+        height: 100%;
+        margin-left: 10px;
+        margin-right: 200px;
+    }
 
     #canvas{
         max-height: 30vh;
@@ -34,32 +40,38 @@
 }
 
 body {
-    background: rgb(76, 227, 238);
+    background: rgb(33, 230, 227);
 }
 
 #canvas{
     z-index: 1;
     width: 100%;
     height: 95vh;
-    background: #dddddd;
-    border:5px solid #cccccc;
-    outline: 1px solid #000000;
+   
     box-shadow: 0 0 1px rgba(0, 0, 0, 0.30), 0 1px 1px rgba(0, 0, 0, .4);
+    transition: 0.2s;
+    border-radius: 5px ;
 }
 
-.menu{
-    background: #dddddd;
+.card{
+    background: rgba(255, 255, 255, 0.962);
     margin-top: 10px;
-    border:5px solid #cccccc;
-    outline: 1px solid #000000;
-    box-shadow: 0 0 1px rgba(0, 0, 0, 0.30), 0 1px 1px rgba(0, 0, 0, .4);
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 40%;
+    border-radius: 5px ;
+
 }
 
-/*.menu-row{
-    text-align: center;
-}*/
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  }
 
-/*.btn {
+.menu-row{
+    text-align: center;
+}
+
+.btn {
     padding: 4px 12px;
     margin-top: 5px;
     min-width: 88px;
@@ -72,16 +84,15 @@ body {
     font-weight: 400;
     background: #cbcbcb;
     box-shadow: 0 0 1px rgba(0, 0, 0, 0.30), 0 1px 1px rgba(0, 0, 0, .4);
-}*/
+}
 
 .title{
-    text-align: center;
+    text-align: left;
     font-weight: bold;
 }
 
-/*.btn:active {
+.btn:active {
     background: linear-gradient(#626262, #626262);
     color: #fff;
     position: relative;
 }
-*/
