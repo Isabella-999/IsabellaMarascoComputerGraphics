@@ -37,7 +37,6 @@ function Shadows(){
         0);                       // mip level
 
     // Shadow settings
-   
     
     shadow.enable = false;
     shadow.fov = 90;
@@ -45,7 +44,7 @@ function Shadows(){
     shadow.projHeight = 1;
     shadow.zFarProj = 25;
     shadow.bias = -0.0001;
-    shadow.showFrustum = true;
+    shadow.showFrustum = false;
 
     return shadow;
 }

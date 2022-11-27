@@ -74,14 +74,9 @@ obj_list.push(calendario);
 obj_list.push(cestino);
 obj_list.push(portaOggetti);
 
-
-
 let scene = new Room(obj_list);
 window.addEventListener('keydown', (e) => {scene.keys[e.key] = true;});
 window.addEventListener('keyup', (e) => {scene.keys[e.key] = false;});
-
-//canvas2DController()
-//add_dat_gui(scene);
 
 mouse = [];
 function mouseDown(e) {
@@ -127,12 +122,7 @@ canvas.onmousemove=mouseMove;
 // add event to checkbox #shadow
 document.getElementById('shadows').addEventListener('change', check);
 
-
-//2D canvas for text
-/*let textCanvas = document.getElementById('textCanvas');
-ctx = textCanvas.getContext('2d');
-makeTextCanvas(700, 500);*/
-
+// Canvas 2d context
 let cameraCanvas = document.getElementById('canvas2d');
 ctx = cameraCanvas.getContext('2d');
 
@@ -142,6 +132,30 @@ let height = cameraColumn.getBoundingClientRect().height;
 makeTextCanvas(width, height);
 
 
+function degToRad(d) {
+    return d * Math.PI / 180;
+}
+
+function isPowerOf2(value) {
+    return (value & (value - 1)) === 0;
+}
+
+function resizeCanvasToDisplaySize(canvas) {
+    // Lookup the size the browser is displaying the canvas in CSS pixels.
+    const displayWidth = canvas.clientWidth;
+    const displayHeight = canvas.clientHeight;
+
+    // Check if the canvas is not the same size.
+    const needResize = canvas.width !== displayWidth || canvas.height !== displayHeight;
+
+    if (needResize) {
+        // Make the canvas the same size
+        canvas.width = displayWidth;
+        canvas.height = displayHeight;
+    }
+
+    return needResize;
+}
 
 render(scene);
 

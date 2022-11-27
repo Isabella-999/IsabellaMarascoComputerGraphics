@@ -1,0 +1,152 @@
+<!DOCTYPE html> 
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="author" content="Isabella Marasco" />
+<link rel="stylesheet" type="text/css" href="style.css">
+<title>Relazione Computer Graphics</title>
+</head>
+<body>  
+    <p class="title">Relazione Computer Graphics</p>
+    <p class="subtitle">Isabella Marasco - 1040993 <br>
+    Laurea Magistrale in Informatica A.A. 2021-2022</p>
+    <hr class="solid">
+    <br>
+    <div>
+        <p class="subsection"> Indice </p>
+        <ul>
+            <li><a href="#introduzione">Introduzione</a></li>
+            <li> <a href="#interfaccia">Interfaccia</a></li>
+            <li><a href="#struttura">Struttura del progetto</a></li>
+            <li><a href="#room">Sviluppo della sala - directory room </a></li>
+            <li><a href="#conclusione">Conclusione</a></li>
+    </div>
+
+    <div> 
+        <p class="subsection" id="introduzione"></a>Introduzione </p>
+        Questo progetto è stato sviluppato per l'esame di "Computer Graphics A.A. 2021/2022". L'obiettivo è di progettare ed implementare un'applicazione 3D interattiva usando WebGL (HTML5, CSS e contesto webgl), linguaggio JavaScript e OpenGL ES SL. <br>
+        La scena è stata sviluppata con l'obiettivo di realizzare una sala operatoria in cui sono presenti: un tavolo operatorio su cui sopra fluttua un cervello che ruota, un porta oggetti e un cestino. Sul muro sono è appeso un orologio e un calendario. Inoltre sulla scena sono presenti anche una porta e il vetro che permette di vedere dall'esterno la sala. <br>
+        Tutti gli oggetti sono stata implementati usando Blender e poi importati in formato <i>.obj</i> <br>
+
+        <p class="subsection" id="interfaccia">Interfaccia</p>
+        L'interfaccia dell'applicazione è composta da due parti, il canvas per la visualizzazione 3D e una colonna con le istruzioni per l'utente, le impostazioni e il canvas 2D in cui sono disegnati dei pulsanti per muoversi nella stanza operatoria. <br>
+
+        <p><img src="img/interfaccia.png" alt="interfaccia" class="img" style="width:1000px;height:600px;"></p>
+
+        I movimenti nella scena possono essere gestiti attraverso: 
+        <ul>
+        <li> la tastiera utilizzando i tasti:
+            <ul>
+                <li><b>W</b> per andare avanti </li>
+                <li> <b>S</b> per andare indietro </li>
+                <li> <b>A</b> per andare a sinistra </li>
+                <li> <b>D</b> per andare a destra </li>
+                <li> <b>Q</b> per andare in alto </li>
+                <li> <b>E</b> per andare in basso </li>
+                <li> <b>↑</b> per ruotare verso l'alto </li>
+                <li> <b>↓</b> per ruotare verso il basso</li>
+                <li><b>←</b> per ruotare verso sinistra </li>
+                <li> <b>→</b> per ruotare verso destra </li>
+            </ul>
+        </li>
+        <li> il touch sulla scena</li>
+        <p><img src="img/movimenti_touch.gif" alt="touch"  style="width:500px;height:300px;"></p>
+        <li> il canvas 2D in cui sono disegnati i pulsanti per il movimento</li>
+        <p><img src="img/canvas2d.png" alt="canvas2d"  style="width:100px;height:100px;"></p>
+    </ul>
+        <p class="subsection" id = "struttura"> Struttura del progetto </p>
+        <p> All'interno della repository sono presenti i seguenti file:
+        <ul>
+            <li> <b> <i>doc</i></b>: è la repository contenente la documentazione del progetto. </li>
+            <li> <b> <i>project</i> </b>: è la repository che contiene i file utilizzati per la realizzazione del progetto ed è strutturata nel seguente modo: 
+                <ul>
+                    <li> <b> <i>libs: </i> </b> contiene le diverse librerie utilizzate </li>
+                    <li> <b> <i>obj: </i> </b> è organizzata in sottocartelle contenenti i file dei modelli mesh realizzati. In ogni sottocartella è presente il file <i>.obj</i> che rappresenta la geometria dell'oggetto e il file <i>.mtl</i> che contiene le informazioni delle texture e dei materiali applicati all'oggetto.</li>
+                    <li> <b> <i>room:</i></b> è una cartella che contiene tutti i file javascript utilizzati per la realizzazione del progetto </li>
+                    <li> <b> <i>style.css:</i> </b> è il foglio di stile utilizzato per la realizzazione dell'interfaccia grafica. </li>
+                    <li> <b> <i>index.html:</i> </b> è il file principale del progetto, che contiene la struttura HTML e il collegamento a tutti i file javascript e fogli di stile. </li>
+                    <li> <b><i> main.js:</i></b></li> è il file principale nel quale vengono creati i canvas 3D e 2D, caricati i modelli mesh e delle funzioni per la gestione di eventi.
+                </ul>
+            </li>
+            </ul>
+        </p>
+
+        
+        <p class="subsection" id ="room"></a>Sviluppo della sala - directory room </p>
+        La directory <i> <b> room</b></i> contiene i file utilizzati per la realizzazione della scena.<br> 
+        I file che lo compongono sono: 
+        <ul>
+        <li> <i><b>camera.js:</b></i> si occupa di gestire la camera e i suoi movimenti nello spazio. </li>
+        <li> <i><b>mesh.js:</b></i> salva i dati relativi ai modelli mesh caricati.</li>
+        <li> <i><b>render.js:</b></i> gestisce il rendering della scena.</li>
+        <li> <i><b>room.js:</b></i> si occupa di gestire la scena e i suoi oggetti. </li>
+        <li> <i><b>shandow.js:</b></i> gestisce le ombre. </li>
+    </ul>
+
+    <p class="subsubsection"> camera.js</p>
+    <p> Il file <i><b>camera.js</b></i> contiene la classe <i>Camera</i> che si occupa di gestire la camera e i suoi movimenti nello spazio. </p> 
+    L'orientamento della camera è definito da tre assi ortogonali, in cui ogni asse è un vettore in coordinate globali. <br>
+   <ul>
+        <li>position: posizione nello spazio della camera.</li>
+        <li>forward: vettore che punta davanti la camera.</li>
+        <li>right: vettore che punta alla destra della camera.</li>
+        <li>up: vettore che punta verso l'alto.</li>
+   </ul>
+   
+   I metodi che sono stati utilizzati sono: <br>
+   <ul>
+   <li><b> rotateUp(step) </b>ruota la telecamera orizzontalmente rispetto alla posizione dell’occhio della telecamera.<br>Questo movimento si ottiene usando il vettore up.</li>
+   <li><b>rotate(step)</b> ruota la telecamera verso l'alto o verso il basso.<br> Questo tipo di movimento è reso possibile attraverso la rotazione sull'asse right.</li>
+   <li><b> moveRight(dist)</b> permette di spostare la telecamera lateralmente senza modificare la direzione della visuale. <br>
+   Questo tipo di movimento è reso possibile sommando la posizione attuale della camera al prodotto della posizione attuale con la distanza fornita, sull'asse right.</li>
+   <li><b> moveUp()</b> Alza o abbassa la telecamera sul suo asse verticale.<br>
+   Questo tipo di movimento è reso possibile sommando la posizione attuale della camera al prodotto della posizione attuale con la distanza fornita, sull'asse up.</li>
+   <li><b>moveForward(d)</b> permette di allontanarsi o avvicinarsi rispetto al punto in cui si sta guardando. <br>
+   Questo tipo di movimento è reso possibile sommando la posizione attuale della camera al prodotto della posizione attuale con la distanza fornita, sull'asse forward.</li>
+   <li><b>reset()</b> permette il riallineamento della telecamera.</li>
+   <li><b>getViewMatrix()</b> restituisce la viewMatrix.</li>
+   <li><b>getPosition()</b> restituisce la posizione della telecamera</li>
+   </ul>
+
+
+   Inoltre, all'interno di questo file, sono presenti le funzioni necessarie per la creazione e l'implementazione dei pulsanti, all'interno del canvas 2D, per gestire i movimenti base della camera: avanti, indietro, destra e sinistra. <br>
+   I tasti vengono disegnati dalla funzione <i>makeKeyCanvas</i>.
+   La funzione <i>drawButton</i> si occupa di disegnare i singoli tasti all'interno del canvas 2D, andando a salvare in un array tutti i tasti che si vogliono realizzare. <br>
+   In seguito, l'array viene iterato tramite la funzione <i>drawAll</i>, che per ogni oggetto dell'array chiama la funzione <i>drawButton</i>. Quest'ultima, si occupa della creazione dei quadrati, che rappresentano i pulsanti, e di determinarne la  dimensione, il colore e il testo da applicare. <br>
+
+   
+
+   <p class="subsubsection"> mesh.js</p>
+    Il file <i><b>mesh.js</b></i> contiene la classe <i>Mesh</i> che si occupa del carimento degli oggetti. <br>
+    Al suo interno è presente il metodo <b>render(gl, programInfo, uniforms)</b> che disegna l'oggetto utilizzando il programma e le uniform specificate nei parametri.
+    
+    <p class="subsubsection"> render.js</p>
+    Il file <i><b>render.js</b></i> contiene una funziona render che si occupa di scegliere uniform e shader a seconda del tipo di rendering scelto. <br>
+    La scena può essere disegnata con due shader, con o senza ombre. <br>
+    Il rendering base supporta le texture e colori, la luce diffusa e la specular lightning. <br>
+    <p class="img"><img src="img/rendering_base.png" alt="rendering_base" style="width:400px;height:300px;" class="img"> <b>Rendering base</b></p>
+
+    La prima techica di rending avanzato è stato il rendering con ombre. <br>
+    Per poter generare le ombre la scena viene disegnata due volta, prima dal punto di vista della luce per generare una shadowmap, poi dal punto di vista dell’osservatore utilizzando la shadowmap generata per capire se un punto è in ombra o meno.
+    <br>
+    <p class="img"><img src="img/rendering_ombre.png" alt="rendering_base" style="width:400px;height:300px;" class="img"> <b>Rendering con ombre</b></p>
+
+    La seconda tecnica di rendering avanzato è stato l'effetto trasparenza su un oggetto del modello, ovvero il vetro della sala operatoria. <br>
+    L'effetto della trasparenza è dato dalla quarta componente colore di RGBA chiamata alpha. Essa misura l'opacità del pixel e può assumere valori compresi tra 0 e 1.
+    <ul>
+    <li>0: il pixel è completamente trasparente</li>
+    <li>1: il pixel è completamente opaco</li>
+    </ul>
+    Per realizzare l'effetto trasparente è stato modificato il valore <i>d</i> dell'oggeto vetro presente nel file <i>room.mtl</i> settandolo a 0.2.
+  
+  
+
+
+
+
+
+
+</div>
+</body>
+
+</html>

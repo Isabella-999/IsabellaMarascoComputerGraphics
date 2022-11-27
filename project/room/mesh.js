@@ -61,6 +61,7 @@ class Mesh {
         });
     }
 
+    
     render(gl, programInfo, uniforms){
         if (!this.ready) return;    // waiting for async functions to complete
 
