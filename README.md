@@ -30,16 +30,3 @@ la seconda si chiami "doc" e contenga una relazione in html sul progetto realizz
 L'archivio contenente il progetto deve essere scaricabile da un repository (indicare per email al docente da dove è scaricabile) almeno 7-10 giorni prima dell'appello d'esame (non inviare il progetto come allegato ad un email). 
 Per il progetto si stimano necessarie almeno 40 ore di lavoro.
 
-
-# Avvertenza 1
-
-Non e' vietato "guardare" codice esistente, anzi si caldeggia di farlo, ma per imparare cose nuove e non per plagiare! Se trovate qualcosa di carino che funziona, ma non capite perche', non lo usate; vi potrebbe essere chiesto di spiegarlo.
-
-## Avvertenza 2
-
-Non si possono usare librerie diverse da quelle messe a disposizione durante il corso mentre si raccomanda di utilizzare tutto quello che e' stato messo a disposizione (glm_utils.js per il caricamento di file .obj, mesh_utils.js, webgl-utils.js, m4.js, jquery-3.6.0.js, dat.gui.js e ui_components.js).
-
-## Avvertenza 3
-
-Eventuali domande sul progetto o richieste di spiegazione verrano pubblicate sulla pagina delle FAQ del progetto, per cui consultarla prima di chiedere spiegazioni al docente.
-
