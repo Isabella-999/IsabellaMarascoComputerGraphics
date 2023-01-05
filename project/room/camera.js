@@ -77,9 +77,9 @@ function makeKeyCanvas() {
 
     var buttons = [];
     buttons.push(makeButton(1, 40,100, 30, 30, 'S', '#21e6e3', 'black', 'black', function () { camera.moveForward(-0.1); }))
-    buttons.push(makeButton(2, 40, 20, 30, 30, 'W', '21e6e3', 'black', 'black', function () { camera.moveForward(0.1); }))
-    buttons.push(makeButton(3, 75, 60, 30, 30, 'D', '21e6e3', 'black', 'black', function () { camera.moveRight(0.1); }))
-    buttons.push(makeButton(4, 5, 60, 30, 30, 'E', '21e6e3', 'black', 'black', function () { camera.moveRight(-0.1); }))
+    buttons.push(makeButton(2, 40, 20, 30, 30, 'W', '#21e6e3', 'black', 'black', function () { camera.moveForward(0.1); }))
+    buttons.push(makeButton(3, 75, 60, 30, 30, 'D', '#21e6e3', 'black', 'black', function () { camera.moveRight(0.1); }))
+    buttons.push(makeButton(4, 5, 60, 30, 30, 'E', '#21e6e3', 'black', 'black', function () { camera.moveRight(-0.1); }))
     
 
     drawAll();
