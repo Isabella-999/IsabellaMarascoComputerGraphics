@@ -4,19 +4,11 @@ function render() {
 
     gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
+    //trasparenza 
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
     let proj = scene.projectionMatrix()
-    let view = scene.camera.getViewMatrix()
-
-    function bindFrameBufferNull(){
-        // draw room to the canvas projecting the depth texture into the room
-        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-        gl.clearColor(.7, .7, .7, 1);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    }
 
     if(scene.shadows.enable){
         const lightWorldMatrix = m4.lookAt(
@@ -41,7 +33,11 @@ function render() {
         };
 
         // draw to the depth texture
-        gl.bindFramebuffer(gl.FRAMEBUFFER, scene.shadows.depthFramebuffer);
+        // draw room to the canvas projecting the depth texture into the room
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+        gl.clearColor(.7, .7, .7, 1);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         gl.viewport(0, 0, scene.shadows.depthTextureSize, scene.shadows.depthTextureSize);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -49,7 +45,10 @@ function render() {
             m.render(gl, scene.shadows.colorProgramInfo, sharedUniforms);
         });
 
-        bindFrameBufferNull()
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+        gl.clearColor(.7, .7, .7, 1);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         let textureMatrix = m4.identity();
         textureMatrix = m4.translate(textureMatrix, 0.5, 0.5, 0.5);
@@ -74,53 +73,11 @@ function render() {
             m.render(gl, scene.shadows.textureProgramInfo, sharedUniforms);
         });
 
-        if (scene.shadows.showFrustum){
-            gl.useProgram(scene.shadows.colorProgramInfo.program);
-            const cubeLinesBufferInfo = webglUtils.createBufferInfoFromArrays(gl, {
-                position: [
-                    -1, -1, -1,
-                    1, -1, -1,
-                    -1,  1, -1,
-                    1,  1, -1,
-                    -1, -1,  1,
-                    1, -1,  1,
-                    -1,  1,  1,
-                    1,  1,  1,
-                ],
-                indices: [
-                    0, 1,
-                    1, 3,
-                    3, 2,
-                    2, 0,
-
-                    4, 5,
-                    5, 7,
-                    7, 6,
-                    6, 4,
-
-                    0, 4,
-                    1, 5,
-                    3, 7,
-                    2, 6,
-                ],
-            });
-
-            webglUtils.setBuffersAndAttributes(gl, scene.shadows.colorProgramInfo, cubeLinesBufferInfo);
-
-            const mat = m4.multiply(lightWorldMatrix, m4.inverse(lightProjectionMatrix));
-
-            webglUtils.setUniforms(scene.shadows.colorProgramInfo, {
-                u_color: [1, 1, 1, 1],
-                u_view: view,
-                u_projection: proj,
-                u_world: mat,
-            });
-
-            webglUtils.drawBufferInfo(gl, cubeLinesBufferInfo, gl.LINES);
-        }
-
     }else{
-        bindFrameBufferNull()
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+        gl.clearColor(.7, .7, .7, 1);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         const sharedUniforms = {
             u_ambientLight: [0.1, 0.1, 0.1],                          // Ambient
@@ -137,6 +94,5 @@ function render() {
             m.render(gl, program, sharedUniforms);
         });
     }
-
     requestAnimationFrame(render);
 }
