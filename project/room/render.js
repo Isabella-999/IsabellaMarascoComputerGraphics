@@ -33,18 +33,14 @@ function render() {
         };
 
         // draw to the depth texture
-        // draw room to the canvas projecting the depth texture into the room
-        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-        gl.clearColor(.7, .7, .7, 1);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, scene.shadows.depthFramebuffer);
         gl.viewport(0, 0, scene.shadows.depthTextureSize, scene.shadows.depthTextureSize);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         scene.mesh_list.forEach(m => {
             m.render(gl, scene.shadows.colorProgramInfo, sharedUniforms);
         });
-
+         // draw room to the canvas projecting the depth texture into the room
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
         gl.clearColor(.7, .7, .7, 1);
