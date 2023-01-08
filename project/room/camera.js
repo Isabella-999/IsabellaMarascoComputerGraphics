@@ -97,9 +97,6 @@ function makeKeyCanvas() {
         if (ctx.isPointInPath(buttons[3], e.offsetX, e.offsetY)) {
             scene.camera.moveRight(-0.1);
         }
-        if (ctx.isPointInPath(buttons[4], e.offsetX, e.offsetY)) {
-            scene.camera.reset();
-        }
     });
 
     cameraCanvas.addEventListener('touchstart', function (e) {
@@ -114,9 +111,6 @@ function makeKeyCanvas() {
         }
         if (ctx.isPointInPath(buttons[3], e.offsetX, e.offsetY)) {
             scene.camera.moveRight(-0.1);
-        }
-        if (ctx.isPointInPath(buttons[4], e.offsetX, e.offsetY)) {
-            scene.camera.reset();
         }
     });
 
